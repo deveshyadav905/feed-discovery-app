@@ -12,9 +12,9 @@ app = FastAPI(
 )
 templates = Jinja2Templates(directory="templates")
 
-# Mount static folder for CSS/JS if needed
-if os.path.isdir("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+# # Mount static folder for CSS/JS if needed
+# if os.path.isdir("static"):
+#     app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # -------------------------------
 # Homepage (Single Page)
