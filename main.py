@@ -1,4 +1,5 @@
 # main.py
+import os
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,7 +13,8 @@ app = FastAPI(
 templates = Jinja2Templates(directory="templates")
 
 # Mount static folder for CSS/JS if needed
-app.mount("/static", StaticFiles(directory="static"), name="static")
+if os.path.isdir("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # -------------------------------
 # Homepage (Single Page)
