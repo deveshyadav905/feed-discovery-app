@@ -9,4 +9,6 @@ SITEMAP_PATTERNS = [
     "sitemap.xml", "sitemap_index.xml", "wp-sitemap.xml", "sitemap-news.xml"
 ]
 
+BAD_PATTERNS = ['comments']
+
 COMMON_PATHS = FEED_PATTERNS + SITEMAP_PATTERNS

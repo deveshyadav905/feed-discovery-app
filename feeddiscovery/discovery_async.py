@@ -2,7 +2,7 @@ import asyncio
 import httpx
 from lxml import html
 from urllib.parse import urljoin
-from .patterns import COMMON_PATHS, FEED_PATTERNS, SITEMAP_PATTERNS
+from .patterns import COMMON_PATHS, FEED_PATTERNS, SITEMAP_PATTERNS,BAD_PATTERNS
 from .utils import normalize_domain
 from .validators_async import validate_feed, validate_sitemap
 
@@ -11,7 +11,7 @@ class AsyncFeedDiscovery:
         self.domain = normalize_domain(domain_url)
         self.base_url = f"https://{self.domain}"
         self.timeout = timeout
-        self.results = []
+        self.results = set()
 
     async def discover(self):
         async with httpx.AsyncClient(timeout=self.timeout, headers={"User-Agent": "Mozilla"}) as client:
@@ -67,7 +67,7 @@ class AsyncFeedDiscovery:
                 if "sitemap:" in line.lower():
                     url = line.split(":", 1)[1].strip()
                     if await validate_sitemap(client, url):
-                        self.results.append({
+                        self.results.add({
                             "url": url,
                             "type": "sitemap",
                             "source": "robots"
@@ -80,3 +80,10 @@ class AsyncFeedDiscovery:
             self.results.append({"url": url, "type": "feed", "source": source})
         elif await validate_sitemap(client, url):
             self.results.append({"url": url, "type": "sitemap", "source": source})
+
+# Not found by script
+
+# <link rel="alternate" href="https://feeds.mcclatchy.com/newsobserver/stories" title="Raleigh NC News, Sports &amp; Politics |  Raleigh News &amp; Observer" type="application/rss+xml"/>
+# 
+#https://news.culturacolectiva.com/feed/ not found by 
+
