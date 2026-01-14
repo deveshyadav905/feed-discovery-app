@@ -11,7 +11,7 @@ class AsyncFeedDiscovery:
         self.domain = normalize_domain(domain_url)
         self.base_url = f"https://{self.domain}"
         self.timeout = timeout
-        self.results = set()
+        self.results = []
 
     async def discover(self):
         async with httpx.AsyncClient(timeout=self.timeout, headers={"User-Agent": "Mozilla"}) as client:
@@ -67,7 +67,7 @@ class AsyncFeedDiscovery:
                 if "sitemap:" in line.lower():
                     url = line.split(":", 1)[1].strip()
                     if await validate_sitemap(client, url):
-                        self.results.add({
+                        self.results.append({
                             "url": url,
                             "type": "sitemap",
                             "source": "robots"
@@ -77,9 +77,9 @@ class AsyncFeedDiscovery:
 
     async def _validate_and_add(self, client, url, source):
         if await validate_feed(client, url):
-            self.results.add({"url": url, "type": "feed", "source": source})
+            self.results.append({"url": url, "type": "feed", "source": source})
         elif await validate_sitemap(client, url):
-            self.results.add({"url": url, "type": "sitemap", "source": source})
+            self.results.append({"url": url, "type": "sitemap", "source": source})
 
 # Not found by script
 
