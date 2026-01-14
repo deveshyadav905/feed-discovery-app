@@ -77,9 +77,9 @@ class AsyncFeedDiscovery:
 
     async def _validate_and_add(self, client, url, source):
         if await validate_feed(client, url):
-            self.results.append({"url": url, "type": "feed", "source": source})
+            self.results.add({"url": url, "type": "feed", "source": source})
         elif await validate_sitemap(client, url):
-            self.results.append({"url": url, "type": "sitemap", "source": source})
+            self.results.add({"url": url, "type": "sitemap", "source": source})
 
 # Not found by script
 
